@@ -1,6 +1,6 @@
 import { Fade, Modal } from "@mui/material";
 import Card from "./Card";
-import CreateSheetForm from "./createSheetForm";
+import CreateSheetForm from "./CreateSheetForm";
 import { createSheetPayload } from "@/types/sheets";
 import { useCreateSheet } from "@/hooks/sheets";
 import { useToast } from "@/providers/ToastProvider";
