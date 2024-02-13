@@ -1,95 +1,125 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { ChangeEvent, useEffect, useState } from "react";
+import Input from "@/components/Input";
+import Card from "@/components/Card";
+import Img from "@/components/Image";
+import Btn from "@/components/Button";
+import Text from "@/components/Text";
+import WaveBackground from "@/components/WaveBackground";
+
+import assets from "@/assets";
+
+import { useToast } from "@/providers/ToastProvider";
+import { useAppTheme } from "@/providers/MUIProvider";
+import { useLogin } from "@/hooks/auth";
+
+import { Grid } from "@mui/material";
+import { isAxiosError } from "axios";
+import { useRouter } from "next/navigation";
+
+const containerStyles = {
+  height: "100vh",
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
 
 export default function Home() {
+  const [username, setUserName] = useState("");
+
+  const { mode } = useAppTheme();
+  const { handleOpen } = useToast();
+  const { loginFn, loginStatus, loginError, loginData } = useLogin();
+
+  const router = useRouter();
+
+  const submit = async () => {
+    const payload = username.trim();
+
+    loginFn(payload);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    setUserName(value);
+  };
+
+  useEffect(() => {
+    const messages = {
+      error: "Algo deu errado no login, tente novamente.",
+      success: "Bem Vindo de volta, aventureiro(a)",
+    };
+
+    if (loginStatus === "idle") return;
+
+    if (isAxiosError(loginError)) {
+      messages.error = loginError?.response?.data?.message ?? messages.error;
+    }
+
+    if (loginData) {
+      messages.success = loginData.message;
+    }
+
+    const message = messages[loginStatus as keyof typeof messages];
+
+    if (message) {
+      handleOpen({
+        severity: loginStatus,
+        text: message,
+      });
+    }
+  }, [loginStatus, handleOpen, loginError, loginData]);
+
+  if (loginStatus === "success") {
+    return router.push("/selectSheet", { scroll: false });
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+    <main id="app">
+      <WaveBackground />
+      <Grid container spacing={2} style={containerStyles}>
+        <Grid item lg={3}>
+          <Card>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Img
+                  src={assets[mode as keyof typeof assets].logo}
+                  width={"100%"}
+                  height={260}
+                  alt="Mighty Blade Logo"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Text variant="h6" textAlign="center">
+                  Gerenciador de fichas ⚔️
+                </Text>
+              </Grid>
+              <Grid item xs={12}>
+                <Input
+                  value={username}
+                  label="Usuário"
+                  onChange={handleChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      submit();
+                    }
+                  }}
+                  disabled={loginStatus === "loading"}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Btn size="large" onClick={submit} loading={loginStatus === "loading"}>
+                  Entrar
+                </Btn>
+              </Grid>
+            </Grid>
+          </Card>
+        </Grid>
+      </Grid>
     </main>
   );
 }
+
