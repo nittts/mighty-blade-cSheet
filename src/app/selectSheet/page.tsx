@@ -19,7 +19,7 @@ import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 export default function SelectSheetPage() {
-  const user: IUser = useStorage.get("@APP:USER");
+  const [user, setUser] = useState<IUser>({} as IUser);
 
   const [openModal, setOpen] = useState(false);
   const handleOpenModal = () => setOpen(true);
@@ -49,6 +49,11 @@ export default function SelectSheetPage() {
       });
     }
   }, [sheetsStatus, handleOpen, getSheetsError, sheets]);
+
+  useEffect(() => {
+    const usr: IUser = useStorage.get("@APP:USER");
+    setUser(usr);
+  }, [])
 
   return (
     <>
