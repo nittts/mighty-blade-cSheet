@@ -9,7 +9,7 @@ interface ICardProps {
 
 export default function CardComponent({ cardContentProps, cardProps, children }: ICardProps) {
   return (
-    <Card style={{ width: "100%", height: "100%" }} {...cardProps}>
+    <Card sx={{ width: "100%", height: "100%" }} {...cardProps}>
       <CardContent {...cardContentProps}>{children}</CardContent>
     </Card>
   );

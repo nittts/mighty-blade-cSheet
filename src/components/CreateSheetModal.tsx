@@ -1,4 +1,4 @@
-import { Fade, Modal } from "@mui/material";
+import { Fade, Grid, IconButton, Modal } from "@mui/material";
 import Card from "./Card";
 import CreateSheetForm from "./CreateSheetForm";
 import { createSheetPayload } from "@/types/sheets";
@@ -6,10 +6,16 @@ import { useCreateSheet } from "@/hooks/sheets";
 import { useToast } from "@/providers/ToastProvider";
 import { isAxiosError } from "axios";
 import { useEffect } from "react";
+import { MdClose } from "react-icons/md";
+import Text from "./Text";
 
 type IModalProps = {
   open: boolean;
   handleClose: () => void;
+};
+
+const modalStyles = {
+  width: ["95vw", "50vw", "40vw", "30vw"],
 };
 
 export default function CreateSheetModal({ open, handleClose }: IModalProps) {
@@ -18,6 +24,7 @@ export default function CreateSheetModal({ open, handleClose }: IModalProps) {
 
   const onFinish = (payload: createSheetPayload) => {
     createSheetFn(payload);
+    handleClose();
   };
 
   useEffect(() => {
@@ -50,8 +57,24 @@ export default function CreateSheetModal({ open, handleClose }: IModalProps) {
     >
       <Fade in={open}>
         <div>
-          <Card>
-            <CreateSheetForm onFinish={onFinish} initialValues={{ name: "" }} />
+          <Card
+            cardProps={{
+              sx: modalStyles,
+            }}
+          >
+            <Grid container>
+              <Grid item xs={11}>
+                <Text variant="h6">Criar Personagem</Text>
+              </Grid>
+              <Grid item xs={1} style={{ display: "flex", justifyContent: "flex-end", marginTop: "-0.7em" }}>
+                <IconButton>
+                  <MdClose size={40} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12}>
+                <CreateSheetForm onFinish={onFinish} />
+              </Grid>
+            </Grid>
           </Card>
         </div>
       </Fade>

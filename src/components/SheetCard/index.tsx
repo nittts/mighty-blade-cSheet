@@ -1,23 +1,28 @@
 import { ISheetCardChar } from "@/types/sheets";
 
-import { CardActionArea, Grid, Rating } from "@mui/material";
+import { CardActionArea, Grid, IconButton, Rating } from "@mui/material";
 
 import Card from "../Card";
 import Img from "../Image";
 import Text from "../Text";
 import RatingStars from "../RatingStars";
 import { useRouter } from "next/navigation";
+import { MdClose } from "react-icons/md";
+import { useDeleteSheet } from "@/hooks/sheets/";
 
 export default function SheetCard({ character }: { character: ISheetCardChar }) {
   const router = useRouter();
+  const { deleteSheetFn } = useDeleteSheet();
+
+  console.log({ character });
 
   return (
-    <Card cardProps={{ elevation: 7 }}>
+    <Card cardProps={{ elevation: 7, sx: { position: "relative" } }}>
       <CardActionArea onClick={() => router.push(`/character/${character.id}`)}>
         <Grid container spacing={1}>
           <Grid item xs={6} md={1}>
             <Img
-              src=""
+              src={character.src}
               width="100%"
               height="auto"
               alt="Character Pic"
@@ -56,6 +61,11 @@ export default function SheetCard({ character }: { character: ISheetCardChar }) 
           </Grid>
         </Grid>
       </CardActionArea>
+      <Grid item sx={{ position: "absolute", top: "0.5%", right: 0 }}>
+        <IconButton onClick={() => deleteSheetFn({ id: character.id })}>
+          <MdClose size={20} />
+        </IconButton>
+      </Grid>
     </Card>
   );
 }

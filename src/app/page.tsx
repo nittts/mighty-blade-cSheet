@@ -80,10 +80,10 @@ export default function Home() {
   return (
     <main id="app">
       <WaveBackground />
-      <Grid container spacing={2} style={containerStyles}>
-        <Grid item lg={3}>
+      <Grid container style={containerStyles}>
+        <Grid item xs={11} sm={8} md={8} lg={3}>
           <Card>
-            <Grid container spacing={2}>
+            <Grid container rowSpacing={2}>
               <Grid item xs={12}>
                 <Img
                   src={assets[mode as keyof typeof assets].logo}
@@ -107,11 +107,11 @@ export default function Home() {
                       submit();
                     }
                   }}
-                  disabled={loginStatus === "loading"}
+                  disabled={loginStatus === "loading" ? true : undefined}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Btn size="large" onClick={submit} loading={loginStatus === "loading"}>
+                <Btn size="large" onClick={submit} loading={loginStatus === "loading" ? true : undefined}>
                   Entrar
                 </Btn>
               </Grid>

@@ -1,27 +1,26 @@
 "use client";
 
+import { ISheetCardChar } from "@/types/sheets";
 import { IUser } from "@/types/user";
+
 import Card from "@/components/Card";
 import Text from "@/components/Text";
+import SheetCard from "@/components/SheetCard";
+import Btn from "@/components/Button";
+import CreateSheetModal from "@/components/CreateSheetModal";
 
+import { useToast } from "@/providers/ToastProvider";
 import { useGetSheets } from "@/hooks/sheets";
 import { useStorage } from "@/utils/localStorage";
 
-import { Grid } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
-import { ISheetCardChar } from "@/types/sheets";
-
-import SheetCard from "@/components/SheetCard";
-import Btn from "@/components/Button";
-
-import { useToast } from "@/providers/ToastProvider";
-import CreateSheetModal from "@/components/CreateSheetModal";
-
 export default function SelectSheetPage() {
   const user: IUser = useStorage.get("@APP:USER");
+
   const [openModal, setOpen] = useState(false);
   const handleOpenModal = () => setOpen(true);
   const handleCloseModal = () => setOpen(false);
@@ -75,9 +74,12 @@ export default function SelectSheetPage() {
             </Card>
           </Grid>
           <Grid item xs={12} style={{ display: "flex", alignItems: "center" }}>
-            <Grid container>
+            {sheetsStatus === "loading" && <CircularProgress />}
+            <Grid container spacing={1}>
               {(sheets?.list || []).map((c: ISheetCardChar) => (
-                <SheetCard key={c.id} character={c} />
+                <Grid key={c.id} item xs={12}>
+                  <SheetCard character={c} />
+                </Grid>
               ))}
             </Grid>
           </Grid>

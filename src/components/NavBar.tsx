@@ -1,5 +1,8 @@
+"use client";
+
 import { Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { GiBackpack, GiBookAura, GiElfHelmet, GiSwordInStone } from "react-icons/gi";
 import { MdClose } from "react-icons/md";
 
@@ -33,7 +36,12 @@ const routes = [
 
 export default function NavBar({ open, closeMenu }: INavbarProps) {
   const router = useRouter();
-  const [http, space, url, href, charId] = window.location.href.split("/");
+  const [charId, setCharId] = useState("");
+
+  useEffect(() => {
+    const [http, space, url, href, charId] = window.location.href.split("/");
+    setCharId(charId);
+  }, []);
 
   return (
     <Drawer open={open} onClose={() => closeMenu(false)} PaperProps={{ sx: { width: ["75vw", "50vw", "auto"] } }}>

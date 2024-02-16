@@ -1,7 +1,9 @@
+"use client";
+
 class storage {
   constructor() {}
 
-  validate(str: string) {
+  private validate(str: string) {
     try {
       JSON.parse(str);
     } catch (e) {
@@ -11,7 +13,8 @@ class storage {
   }
 
   get(key: string) {
-    const item = localStorage.getItem(key);
+     
+    const item = window.localStorage.getItem(key);
 
     if (!item) {
       return {};
@@ -25,7 +28,7 @@ class storage {
   }
 
   set(key: string, value: unknown) {
-    localStorage.setItem(key, JSON.stringify(value));
+    window.localStorage.setItem(key, JSON.stringify(value));
   }
 }
 

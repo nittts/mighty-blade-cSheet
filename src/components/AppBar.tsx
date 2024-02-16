@@ -27,9 +27,15 @@ export default function NavTitle({ openMenu }: IMenuProps) {
           >
             <MdMenu />
           </IconButton>
-          <Text variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Personagens
-          </Text>
+          <Text variant="h6" component="div" sx={{ flexGrow: 1 }}></Text>
+          <Btn
+            fullWidth={false}
+            color="inherit"
+            onClick={() => router.push("/selectSheet")}
+            style={{ marginRight: 10 }}
+          >
+            Trocar de Personagem
+          </Btn>
           <Btn fullWidth={false} color="inherit" onClick={() => router.push("/")}>
             Desconectar
           </Btn>

@@ -10,12 +10,17 @@ export default function useCreateSheet() {
     status: createSheetStatus,
     error: createSheetError,
   } = useMutation(SHEETS_QUERY_ID, createSheet, {
-    onSuccess: (_, variables) => {
-      queryClient.setQueriesData<unknown[]>(SHEETS_QUERY_ID, (oldData) => {
+    onSuccess: (data, variables) => {
+      console.log(data);
+
+      queryClient.setQueriesData(SHEETS_QUERY_ID, (oldData: any) => {
         if (oldData) {
-          return [...oldData, variables];
+          const list = [...(oldData?.list || {}), data.newSheet];
+
+          return { ...oldData, list };
         }
-        return [];
+
+        return {};
       });
     },
   });
