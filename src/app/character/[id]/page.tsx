@@ -9,7 +9,7 @@ import { useStorage } from "@/utils/localStorage";
 import { Alert, Grid } from "@mui/material";
 
 type LooseObject = {
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 export default function Page({ params }: LooseObject) {
