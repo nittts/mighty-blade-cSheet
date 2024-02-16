@@ -8,15 +8,15 @@ import { IUser } from "@/types/user";
 import { useStorage } from "@/utils/localStorage";
 import { Alert, Grid } from "@mui/material";
 
-type LooseObject = {
-  [key: string]: unknown;
-};
-
-export default function Page({ params }: LooseObject) {
+interface PageProps {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+export default function Page({ params }: PageProps) {
   const user: IUser = useStorage.get("@APP:USER");
   const { sheets, sheetsStatus } = useGetSheets(user.id);
 
-  const sheet = (sheets?.list || []).find((s: ISheetCardChar) => s.id === params.id);
+  const sheet = (sheets?.list || []).find((s: ISheetCardChar) => s.id === params.slug );
 
   if (sheetsStatus === "loading") {
     return (
