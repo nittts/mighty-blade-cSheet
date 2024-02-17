@@ -1,10 +1,9 @@
 import { createSheetPayload } from "@/types/sheets";
-import { Box, Grid, IconButton, Input } from "@mui/material";
+import { Box, FormControl, Grid, Input, InputLabel } from "@mui/material";
 import { useFormik } from "formik";
 import InputField from "./Input";
 import Btn from "./Button";
-import Text from "./Text";
-import { MdClose } from "react-icons/md";
+import { BiCheckCircle, BiSolidCheckCircle } from "react-icons/bi";
 
 type createSheetForms = {
   onFinish: (payload: createSheetPayload) => void;
@@ -73,17 +72,28 @@ export default function CreateSheetForm({ onFinish }: createSheetForms) {
             value={formikForm.values.class}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Input
-            type="file"
-            id="src"
-            name="src"
-            onChange={async (e: any) => {
-              const file = e.target.files[0];
-              const base64 = await getBase64(file);
-              formikForm.setFieldValue("src", base64);
-            }}
-          />
+        <Grid item xs={12} style={{ display: "flex", justifyContent: "center" }}>
+          <Btn
+            variant="contained"
+            component="label"
+            fullWidth={false}
+            color={formikForm.values.src === "" ? "primary" : "success"}
+            style={{ transition: "0.2s width", width: formikForm.values.src === "" ? "100%" : "30px" }}
+            onClick={() => formikForm.setFieldValue("src", "")}
+          >
+            {formikForm.values.src === "" ? "Selecione uma imagem" : <BiSolidCheckCircle size={30} />}
+            <Input
+              sx={{ display: "none" }}
+              type="file"
+              id="src"
+              name="src"
+              onChange={async (e: any) => {
+                const file = e.target.files[0];
+                const base64 = await getBase64(file);
+                formikForm.setFieldValue("src", base64);
+              }}
+            />
+          </Btn>
         </Grid>
         <Grid item xs={12}>
           <Btn type="submit">Criar</Btn>

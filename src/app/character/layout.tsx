@@ -1,6 +1,6 @@
 "use client";
 
-import NavTitle from "@/components/AppBar";
+import NavTitle from "@/components/NavTitle";
 import Card from "@/components/Card";
 import NavBar from "@/components/NavBar";
 
@@ -21,7 +21,7 @@ export default function CharacterLayout({
     <Card>
       <NavTitle openMenu={handleNavBar} />
       <NavBar open={navBarOpen} closeMenu={handleNavBar} />
-      {children}
+      <div style={{ marginTop: 10 }}>{children}</div>
     </Card>
   );
 }

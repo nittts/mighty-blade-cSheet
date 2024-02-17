@@ -47,5 +47,21 @@ export async function DELETE(req: Request) {
 
   const res = await collection.deleteOne({ id });
 
-  return NextResponse.json({ message: "Ficha criada", deleted: res }, { status: 200 });
+  return NextResponse.json({ message: "Ficha removida", deleted: res }, { status: 200 });
+}
+
+export async function PATCH(req: Request) {
+  const connection = await connectToDatabase();
+  const body = await req.json();
+
+  const { id, ...payload } = body;
+
+  if (!connection?.mongoClient) {
+    return NextResponse.json({ message: "erro ao conectar com o banco de dados" }, { status: 500 });
+  }
+  const collection = connection.mongoClient.db("sheets").collection("characters");
+
+  const res = await collection.updateOne({ id }, { $set: payload });
+
+  return NextResponse.json({ message: "Ficha editada", sheet: res }, { status: 200 });
 }

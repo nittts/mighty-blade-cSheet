@@ -67,7 +67,7 @@ export default function CreateSheetModal({ open, handleClose }: IModalProps) {
                 <Text variant="h6">Criar Personagem</Text>
               </Grid>
               <Grid item xs={1} style={{ display: "flex", justifyContent: "flex-end", marginTop: "-0.7em" }}>
-                <IconButton>
+                <IconButton onClick={handleClose}>
                   <MdClose size={40} />
                 </IconButton>
               </Grid>

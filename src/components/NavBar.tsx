@@ -1,10 +1,28 @@
 "use client";
 
-import { Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  Link,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GiBackpack, GiBookAura, GiElfHelmet, GiSwordInStone } from "react-icons/gi";
 import { MdClose } from "react-icons/md";
+import Img from "./Image";
+import { useGetSheets } from "@/hooks/sheets";
+import { ISheetCardChar } from "@/types/sheets";
+import { PiGithubLogoFill } from "react-icons/pi";
 
 interface INavbarProps {
   open: boolean;
@@ -37,6 +55,9 @@ const routes = [
 export default function NavBar({ open, closeMenu }: INavbarProps) {
   const router = useRouter();
   const [charId, setCharId] = useState("");
+  const { sheets } = useGetSheets();
+
+  const sheet = (sheets?.list || []).find((s: ISheetCardChar) => s.id === charId);
 
   useEffect(() => {
     const [http, space, url, href, charId] = window.location.href.split("/");
@@ -45,10 +66,28 @@ export default function NavBar({ open, closeMenu }: INavbarProps) {
 
   return (
     <Drawer open={open} onClose={() => closeMenu(false)} PaperProps={{ sx: { width: ["75vw", "50vw", "auto"] } }}>
-      <Toolbar style={{ position: "relative" }}>
+      <Toolbar style={{ position: "relative", display: "flex", flexDirection: "column" }}>
         <IconButton onClick={() => closeMenu(false)} style={{ position: "absolute", top: 0, right: 0 }}>
           <MdClose size={30} />
         </IconButton>
+        <Img
+          width="100%"
+          height="100%"
+          style={{
+            maxHeight: "150px",
+            maxWidth: "150px",
+            aspectRatio: "1 / 1",
+            border: "3px solid grey",
+            borderRadius: "4px",
+            marginTop: "40px",
+            marginBottom: "5px",
+          }}
+          src={sheet?.src}
+          alt="characterIMG"
+        />
+        <Typography variant="subtitle2">Bem vindo de volta, grande aventureiro(a)</Typography>
+        <Typography variant="subtitle1">{sheet?.name}</Typography>
+        <Divider orientation="horizontal" flexItem sx={{ borderBottomWidth: 4 }} />
       </Toolbar>
       <List>
         {routes.map((r) => (
@@ -67,6 +106,20 @@ export default function NavBar({ open, closeMenu }: INavbarProps) {
           </ListItem>
         ))}
       </List>
+      <Box style={{ position: "absolute", bottom: 0, right: 0, width: "100%" }}>
+        <Typography
+          variant="subtitle2"
+          textAlign="center"
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}
+        >
+          Made with ❤️ by Will
+          <Tooltip title="Github">
+            <Link href="https://github.com/nittts" target="_blank" rel="noreferrer">
+              <PiGithubLogoFill color="#fff" size="2em" />
+            </Link>
+          </Tooltip>
+        </Typography>
+      </Box>
     </Drawer>
   );
 }

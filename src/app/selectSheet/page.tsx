@@ -1,7 +1,6 @@
 "use client";
 
 import { ISheetCardChar } from "@/types/sheets";
-import { IUser } from "@/types/user";
 
 import Card from "@/components/Card";
 import Text from "@/components/Text";
@@ -11,7 +10,6 @@ import CreateSheetModal from "@/components/CreateSheetModal";
 
 import { useToast } from "@/providers/ToastProvider";
 import { useGetSheets } from "@/hooks/sheets";
-import { useStorage } from "@/utils/localStorage";
 
 import { CircularProgress, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -19,13 +17,11 @@ import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 export default function SelectSheetPage() {
-  const [user, setUser] = useState<IUser>({} as IUser);
-
   const [openModal, setOpen] = useState(false);
   const handleOpenModal = () => setOpen(true);
   const handleCloseModal = () => setOpen(false);
 
-  const { sheets, sheetsStatus, getSheetsError } = useGetSheets(user.id);
+  const { sheets, sheetsStatus, getSheetsError } = useGetSheets();
   const { handleOpen } = useToast();
   const router = useRouter();
 
@@ -49,11 +45,6 @@ export default function SelectSheetPage() {
       });
     }
   }, [sheetsStatus, handleOpen, getSheetsError, sheets]);
-
-  useEffect(() => {
-    const usr: IUser = useStorage.get("@APP:USER");
-    setUser(usr);
-  }, [])
 
   return (
     <>

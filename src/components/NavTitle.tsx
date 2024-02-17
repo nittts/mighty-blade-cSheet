@@ -33,10 +33,11 @@ export default function NavTitle({ openMenu }: IMenuProps) {
             color="inherit"
             onClick={() => router.push("/selectSheet")}
             style={{ marginRight: 10 }}
+            sx={{ fontSize: ["0.5em", "0.8em"] }}
           >
             Trocar de Personagem
           </Btn>
-          <Btn fullWidth={false} color="inherit" onClick={() => router.push("/")}>
+          <Btn fullWidth={false} color="inherit" sx={{ fontSize: ["0.5em", "0.8em"] }} onClick={() => router.push("/")}>
             Desconectar
           </Btn>
         </Toolbar>

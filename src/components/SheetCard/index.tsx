@@ -14,8 +14,6 @@ export default function SheetCard({ character }: { character: ISheetCardChar }) 
   const router = useRouter();
   const { deleteSheetFn } = useDeleteSheet();
 
-  console.log({ character });
-
   return (
     <Card cardProps={{ elevation: 7, sx: { position: "relative" } }}>
       <CardActionArea onClick={() => router.push(`/character/${character.id}`)}>
@@ -26,7 +24,12 @@ export default function SheetCard({ character }: { character: ISheetCardChar }) 
               width="100%"
               height="auto"
               alt="Character Pic"
-              style={{ border: "3px solid gray", borderRadius: "9999px" }}
+              style={{
+                maxHeight: "150px",
+                aspectRatio: "1 / 1",
+                border: "3px solid grey",
+                borderRadius: "4px",
+              }}
             />
           </Grid>
           <Grid item xs={6} md={4} lg={3}>
