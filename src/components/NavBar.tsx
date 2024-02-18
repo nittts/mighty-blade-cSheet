@@ -23,6 +23,7 @@ import Img from "./Image";
 import { useGetSheets } from "@/hooks/sheets";
 import { ISheetCardChar } from "@/types/sheets";
 import { PiGithubLogoFill } from "react-icons/pi";
+import { FaDiceD20 } from "react-icons/fa6";
 
 interface INavbarProps {
   open: boolean;
@@ -49,6 +50,11 @@ const routes = [
     title: "Equipamentos",
     route: "/equipaments",
     icon: GiBackpack,
+  },
+  {
+    title: "Dados",
+    route: "/dice",
+    icon: FaDiceD20,
   },
 ];
 

@@ -1,7 +1,6 @@
 "use client";
 
 import CardComponent from "@/components/Card";
-import Img from "@/components/Image";
 import CharacterForm, { ICharacterFormPayload } from "@/components/SheetForms/character";
 import { useGetSheets, useEditSheet } from "@/hooks/sheets";
 import { PageProps } from "@/types/page";
