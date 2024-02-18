@@ -28,7 +28,8 @@ export default function AbilitiesForm({ initialValues, onChange }: abilitiesForm
   const { width } = useWindowSize();
   const isSmall = width && width <= 768;
 
-  const createNewAbility: MRT_TableOptions<ability>["onCreatingRowSave"] = ({ values, table }) => {
+  const createNewAbility = (table: any) => {
+    const values = { description: "", difficuty: "", mana: "", name: "" };
     const copy = [...initialValues, values];
 
     onChange({ abilities: copy });
@@ -55,15 +56,15 @@ export default function AbilitiesForm({ initialValues, onChange }: abilitiesForm
 
   const SmallCell = ({ row }: any) => {
     const label = [
-      { header: "Nome", icon: <GiBookCover /> },
-      { header: "Dificuldade", icon: <FaDiceD20 /> },
-      { header: "Mana", icon: <GiMagicSwirl /> },
-      { header: "Descrição", icon: <BsChatLeftTextFill /> },
+      { header: "Nome", icon: <GiBookCover />, key: "name" },
+      { header: "Dificuldade", icon: <FaDiceD20 />, key: "difficulty" },
+      { header: "Mana", icon: <GiMagicSwirl />, key: "mana" },
+      { header: "Descrição", icon: <BsChatLeftTextFill />, key: "description" },
     ];
 
     return (
       <Grid container spacing={1}>
-        {Object.keys(row.original).map((key, idx) => (
+        {label.map(({ key }, idx) => (
           <Grid item xs={12} key={key}>
             <TextField
               variant="standard"
@@ -142,6 +143,7 @@ export default function AbilitiesForm({ initialValues, onChange }: abilitiesForm
           sx={{ fontSize: ["0.6em", "0.9em"] }}
           onClick={() => {
             table.setCreatingRow(true);
+            createNewAbility(table);
           }}
         >
           Nova Habilidade

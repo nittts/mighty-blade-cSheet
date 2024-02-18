@@ -26,7 +26,8 @@ export default function EquipamentsForm({ initialValues, onChange }: Equipaments
   const { width } = useWindowSize();
   const isSmall = width && width <= 768;
 
-  const createNewAbility: MRT_TableOptions<equipaments>["onCreatingRowSave"] = ({ values, table }) => {
+  const createNewAbility = (table: any) => {
+    const values = { item: "", weight: "", cost: "" };
     const copy = [...initialValues, values];
 
     onChange({ equipaments: copy });
@@ -53,14 +54,14 @@ export default function EquipamentsForm({ initialValues, onChange }: Equipaments
 
   const SmallCell = ({ row }: any) => {
     const label = [
-      { header: "Item", icon: <GiBookCover /> },
-      { header: "Peso", icon: <GiWeight /> },
-      { header: "Custo", icon: <GiCoins /> },
+      { header: "Item", icon: <GiBookCover />, key: "item" },
+      { header: "Peso", icon: <GiWeight />, key: "weight" },
+      { header: "Custo", icon: <GiCoins />, key: "cost" },
     ];
 
     return (
       <Grid container spacing={1}>
-        {Object.keys(row.original).map((key, idx) => (
+        {label.map(({ key }, idx) => (
           <Grid item xs={12} key={key}>
             <TextField
               variant="standard"
@@ -139,6 +140,7 @@ export default function EquipamentsForm({ initialValues, onChange }: Equipaments
           sx={{ fontSize: ["0.6em", "0.9em"] }}
           onClick={() => {
             table.setCreatingRow(true);
+            createNewAbility(table);
           }}
         >
           Novo Equipamento

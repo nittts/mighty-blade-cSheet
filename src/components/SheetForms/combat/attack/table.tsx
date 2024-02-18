@@ -26,7 +26,8 @@ function AttackItemsTable({ initialValues, onChange }: CombatListAttackProps) {
   const { width } = useWindowSize();
   const isSmall = width && width <= 768;
 
-  const createNewAbility: MRT_TableOptions<combatTypeAttackList>["onCreatingRowSave"] = ({ values, table }) => {
+  const createNewAbility = (table: any) => {
+    const values = { weapon: "", type: "", damage: "" };
     const copy = [...initialValues, values];
 
     onChange(copy);
@@ -53,14 +54,14 @@ function AttackItemsTable({ initialValues, onChange }: CombatListAttackProps) {
 
   const SmallCell = ({ row }: any) => {
     const label = [
-      { header: "Arma", icon: <GiBookCover /> },
-      { header: "Tipo", icon: <MdMergeType /> },
-      { header: "Dano", icon: <GiDrippingSword /> },
+      { header: "Arma", icon: <GiBookCover />, key: "weapon" },
+      { header: "Tipo", icon: <MdMergeType />, key: "type" },
+      { header: "Dano", icon: <GiDrippingSword />, key: "damage" },
     ];
 
     return (
       <Grid container spacing={1}>
-        {Object.keys(row.original).map((key, idx) => (
+        {label.map(({ key }, idx) => (
           <Grid item xs={12} key={key}>
             <TextField
               variant="standard"
@@ -139,6 +140,7 @@ function AttackItemsTable({ initialValues, onChange }: CombatListAttackProps) {
           sx={{ fontSize: ["0.6em", "0.9em"] }}
           onClick={() => {
             table.setCreatingRow(true);
+            createNewAbility(table);
           }}
         >
           Novo Item

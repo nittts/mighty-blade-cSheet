@@ -28,7 +28,8 @@ function DefenseItemsTable({ initialValues, onChange }: CombatListDefenseProps) 
   const { width } = useWindowSize();
   const isSmall = width && width <= 768;
 
-  const createNewAbility: MRT_TableOptions<combatTypeDefenseList>["onCreatingRowSave"] = ({ values, table }) => {
+  const createNewAbility = (table: any) => {
+    const values = { name: "", type: "", defense: "" };
     const copy = [...initialValues, values];
 
     onChange(copy);
@@ -55,14 +56,14 @@ function DefenseItemsTable({ initialValues, onChange }: CombatListDefenseProps) 
 
   const SmallCell = ({ row }: any) => {
     const label = [
-      { header: "Nome", icon: <GiBookCover /> },
-      { header: "Tipo", icon: <MdMergeType /> },
-      { header: "Defesa", icon: <GiShieldBounces /> },
+      { header: "Nome", icon: <GiBookCover />, key: "name" },
+      { header: "Tipo", icon: <MdMergeType />, key: "type" },
+      { header: "Defesa", icon: <GiShieldBounces />, key: "defense" },
     ];
 
     return (
       <Grid container spacing={1}>
-        {Object.keys(row.original).map((key, idx) => (
+        {label.map(({ key }, idx) => (
           <Grid item xs={12} key={key}>
             <TextField
               variant="standard"
@@ -141,6 +142,7 @@ function DefenseItemsTable({ initialValues, onChange }: CombatListDefenseProps) 
           sx={{ fontSize: ["0.6em", "0.9em"] }}
           onClick={() => {
             table.setCreatingRow(true);
+            createNewAbility(table);
           }}
         >
           Novo Item
