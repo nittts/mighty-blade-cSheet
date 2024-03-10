@@ -14,10 +14,6 @@ const columns: MRT_ColumnDef<ability>[] = [
     accessorKey: "mana",
     header: "Mana",
   },
-  {
-    accessorKey: "description",
-    header: "Descrição",
-  },
 ];
 
 export default columns;

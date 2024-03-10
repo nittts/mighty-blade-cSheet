@@ -6,6 +6,8 @@ export async function GET(req: Request) {
   const connection = await connectToDatabase();
   const { searchParams } = new URL(req.url);
 
+  console.log(searchParams)
+
   const userId = searchParams.get("userId");
 
   if (!connection?.mongoClient) {
@@ -13,7 +15,7 @@ export async function GET(req: Request) {
   }
   const collection = connection.mongoClient.db("sheets").collection("characters");
 
-  const res = await collection.find({ userId }).toArray();
+  const res = await collection.find({ userId }, {}, ).toArray();
 
   return NextResponse.json({ message: "fichas encontradas", list: res }, { status: 200 });
 }

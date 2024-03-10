@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ability } from "@/types/sheets";
 import { useDebounceValue } from "usehooks-ts";
-import { MRT_TableOptions, MaterialReactTable } from "material-react-table";
+import { MaterialReactTable } from "material-react-table";
 
 import { MRT_Localization_PT_BR } from "material-react-table/locales/pt-BR";
 import columns from "./columns";
@@ -13,6 +13,9 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { GiBookCover, GiMagicSwirl } from "react-icons/gi";
 import { FaDiceD20 } from "react-icons/fa";
 import { BsChatLeftTextFill } from "react-icons/bs";
+
+import InputField from "@/components/Input";
+import CardComponent from "@/components/Card";
 
 export type IAbilitiesFormPayload = { abilities: ability[] };
 
@@ -54,23 +57,50 @@ export default function AbilitiesForm({ initialValues, onChange }: abilitiesForm
     onBlur: (e: any) => saveInputValue(e, row),
   });
 
+
+  /* ------------------------------------ - ----------------------------------- */
+
+  const expansiveRow = ({ row, table }: any) => {
+    const { index, original } = row;
+
+    const handleChange = (text: string) => {
+      const edittedAbility = { ...original, description: text }
+
+      const copyAbilities = initialValues.map((sheet, idx) => idx === index ? edittedAbility : sheet)
+      
+      setEditValues(copyAbilities);
+    }
+
+    return ( 
+    <CardComponent cardProps={{ elevation: 4}}>
+      <InputField
+        fullWidth
+        multiline
+        variant="filled"
+        style={{ border: 'none',fontSize: '7px'  }}
+        defaultValue={original.description}
+        onChange={(e) => { handleChange(e.target.value)}}
+      />
+    </CardComponent>)
+  }
+
   const SmallCell = ({ row }: any) => {
     const label = [
       { header: "Nome", icon: <GiBookCover />, key: "name" },
       { header: "Dificuldade", icon: <FaDiceD20 />, key: "difficulty" },
       { header: "Mana", icon: <GiMagicSwirl />, key: "mana" },
-      { header: "Descrição", icon: <BsChatLeftTextFill />, key: "description" },
     ];
 
     return (
-      <Grid container spacing={1}>
-        {label.map(({ key }, idx) => (
+      <Grid container spacing={1} >
+        {label.map(({ key,  header }, idx) => (
           <Grid item xs={12} key={key}>
             <TextField
               variant="standard"
               InputLabelProps={{
                 shrink: true,
               }}
+              {...(header === 'Descrição' && { multiline: true })}
               size="small"
               name={key}
               InputProps={{
@@ -113,12 +143,15 @@ export default function AbilitiesForm({ initialValues, onChange }: abilitiesForm
 
   const memoColumns = isSmall ? smallColumns : columns.map((c) => ({ ...c, muiEditTextFieldProps }));
 
+  /* ------------------------------------ - ----------------------------------- */
+
   return (
     <MaterialReactTable
       enableEditing={!isSmall}
       enableToolbarInternalActions={false}
       enableRowActions
       enableCellActions
+      renderDetailPanel={expansiveRow}
       enableClickToCopy="context-menu"
       createDisplayMode="row"
       editDisplayMode="cell"
@@ -133,8 +166,15 @@ export default function AbilitiesForm({ initialValues, onChange }: abilitiesForm
           background: "#0b0b0b",
         },
       }}
+      muiTableBodyCellProps={{ 
+        sx: {
+          padding: 0,
+          margin: 0,
+        }
+      }}
       initialState={{
         density: "compact",
+
       }}
       renderBottomToolbar={false}
       renderTopToolbarCustomActions={({ table }) => (

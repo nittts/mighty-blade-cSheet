@@ -4,27 +4,14 @@ import { useFormik } from "formik";
 import InputField from "./Input";
 import Btn from "./Button";
 import { BiCheckCircle, BiSolidCheckCircle } from "react-icons/bi";
+import getBase64 from "@/utils/getBase64";
 
 type createSheetForms = {
   onFinish: (payload: createSheetPayload) => void;
 };
 
 export default function CreateSheetForm({ onFinish }: createSheetForms) {
-  function getBase64(file: any) {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
 
-      fileReader.readAsDataURL(file);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  }
 
   const formikForm = useFormik<createSheetPayload>({
     initialValues: {

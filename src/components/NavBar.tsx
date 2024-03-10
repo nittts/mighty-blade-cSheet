@@ -5,6 +5,7 @@ import {
   Divider,
   Drawer,
   IconButton,
+  Input,
   Link,
   List,
   ListItem,
@@ -16,14 +17,16 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GiBackpack, GiBookAura, GiElfHelmet, GiSwordInStone } from "react-icons/gi";
 import { MdClose } from "react-icons/md";
 import Img from "./Image";
-import { useGetSheets } from "@/hooks/sheets";
+import { useEditSheet, useGetSheets } from "@/hooks/sheets";
 import { ISheetCardChar } from "@/types/sheets";
 import { PiGithubLogoFill } from "react-icons/pi";
 import { FaDiceD20 } from "react-icons/fa6";
+import getBase64 from "@/utils/getBase64";
+import Btn from "./Button";
 
 interface INavbarProps {
   open: boolean;
@@ -62,8 +65,16 @@ export default function NavBar({ open, closeMenu }: INavbarProps) {
   const router = useRouter();
   const [charId, setCharId] = useState("");
   const { sheets } = useGetSheets();
+  const { editSheetFn } = useEditSheet();
 
   const sheet = (sheets?.list || []).find((s: ISheetCardChar) => s.id === charId);
+
+  const updateImgSrc = (src: string) => {
+    sheet.src = src;
+    editSheetFn({ src })
+  };
+
+  const imgUploadRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const [http, space, url, href, charId] = window.location.href.split("/");
@@ -76,10 +87,19 @@ export default function NavBar({ open, closeMenu }: INavbarProps) {
         <IconButton onClick={() => closeMenu(false)} style={{ position: "absolute", top: 0, right: 0 }}>
           <MdClose size={30} />
         </IconButton>
-        <Img
-          width="100%"
-          height="100%"
-          style={{
+        <input
+              style={{ display: "none" }}
+              type="file"
+              id="src"
+              name="src"
+              ref={imgUploadRef}
+              onChange={async (e: any) => {
+                const file = e.target.files[0];
+                const base64 = await getBase64(file);
+                updateImgSrc(base64)
+              }}
+        />
+        <Btn style={{
             maxHeight: "150px",
             maxWidth: "150px",
             aspectRatio: "1 / 1",
@@ -87,10 +107,23 @@ export default function NavBar({ open, closeMenu }: INavbarProps) {
             borderRadius: "4px",
             marginTop: "40px",
             marginBottom: "5px",
-          }}
+            padding: 0,
+        }}
+        onClick={() => {
+          console.log(imgUploadRef.current)
+          if(imgUploadRef.current) {
+            imgUploadRef.current.click()
+          }
+        }}
+        >
+        <Img
+          width="100%"
+          height="100%"
           src={sheet?.src}
           alt="characterIMG"
-        />
+          />
+        </Btn>
+
         <Typography variant="subtitle2">Bem vindo de volta, grande aventureiro(a)</Typography>
         <Typography variant="subtitle1">{sheet?.name}</Typography>
         <Divider orientation="horizontal" flexItem sx={{ borderBottomWidth: 4 }} />

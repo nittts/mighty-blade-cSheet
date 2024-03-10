@@ -21,7 +21,7 @@ export default function SelectSheetPage() {
   const handleOpenModal = () => setOpen(true);
   const handleCloseModal = () => setOpen(false);
 
-  const { sheets, sheetsStatus, getSheetsError } = useGetSheets();
+  const { sheets, sheetsStatus, getSheetsError } = useGetSheets({ name: 1, class: 1, race: 1, age: 1, src: 1 });
   const { handleOpen } = useToast();
   const router = useRouter();
 

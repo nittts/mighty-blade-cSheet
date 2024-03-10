@@ -4,9 +4,9 @@ import { createSheetPayload } from "@/types/sheets";
 import api from "./api";
 import { useStorage } from "@/utils/localStorage";
 
-export async function getSheets() {
+export async function getSheets(params: any) {
   const user = useStorage.get("@APP:USER");
-  const res = await api.get("/api/sheets", { params: { userId: user.id } });
+  const res = await api.get("/api/sheets", { params: { userId: user.id, ...params } });
 
   return res.data;
 }

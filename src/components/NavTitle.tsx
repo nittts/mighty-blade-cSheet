@@ -13,6 +13,11 @@ interface IMenuProps {
 export default function NavTitle({ openMenu }: IMenuProps) {
   const router = useRouter();
 
+  const logout = () => {
+    router.push('/')
+    localStorage.clear()
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -37,7 +42,7 @@ export default function NavTitle({ openMenu }: IMenuProps) {
           >
             Trocar de Personagem
           </Btn>
-          <Btn fullWidth={false} color="inherit" sx={{ fontSize: ["0.5em", "0.8em"] }} onClick={() => router.push("/")}>
+          <Btn fullWidth={false} color="inherit" sx={{ fontSize: ["0.5em", "0.8em"] }} onClick={logout}>
             Desconectar
           </Btn>
         </Toolbar>

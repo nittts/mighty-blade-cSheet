@@ -18,7 +18,8 @@ export default function CombatPage({ params }: PageProps) {
   const sheet = (sheets?.list || []).find((s: ISheetCardChar) => s.id === params.slug);
 
   const handleChange = (payload: ICombatPayload) => {
-    const data = { ...payload, id: params.slug };
+    const data = {  combat: { ...sheet.combat, ...payload.combat }, id: params.slug };
+
     editSheetFn(data);
   };
 
